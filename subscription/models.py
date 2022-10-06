@@ -3,7 +3,7 @@ from django.utils import timezone
 
 
 class Subscription(models.Model):
-    name = models.CharField('Название подписки')
+    name = models.CharField(max_length=25, verbose_name='Название подписки')
     status = models.BooleanField(
         'Статус подписки',
         default=False,
