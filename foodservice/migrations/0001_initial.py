@@ -59,7 +59,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=25, verbose_name='Название алергии')),
                 ('allergic_users', models.ManyToManyField(blank=True, null=True, related_name='allergies', to='foodservice.User', verbose_name='Аллергии')),
-                (
+                
             ],
         ),
     ]

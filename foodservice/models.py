@@ -19,7 +19,7 @@ class User(models.Model):
 
 class Allergen(models.Model):
     name = models.CharField(max_length=25, verbose_name='Название алергена')
-    
+
     class Meta:
         verbose_name = 'аллерген'
         verbose_name_plural = 'аллергены'
@@ -54,17 +54,20 @@ class RecipeCategory(models.Model):
 
 
 class Recipe(models.Model):
-    name = models.CharField(max_length=25, verbose_name='Название рецепта')
+    name = models.CharField(max_length=50, verbose_name='Название рецепта')
     calories = models.DecimalField(max_digits=7, decimal_places=2)
-    proteins = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True,)
-    fats = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True,)
-    carbs = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True,)
+    proteins = models.DecimalField(
+        max_digits=5, decimal_places=2, blank=True, null=True,)
+    fats = models.DecimalField(
+        max_digits=5, decimal_places=2, blank=True, null=True,)
+    carbs = models.DecimalField(
+        max_digits=5, decimal_places=2, blank=True, null=True,)
     image = models.ImageField(
         'картинка'
     )
     description = models.TextField(
         'описание',
-        max_length=200,
+        max_length=3000,
         blank=True,
     )
     category = models.ForeignKey(
@@ -79,7 +82,7 @@ class Recipe(models.Model):
         Allergen,
         related_name='recipes_with_allergen',
         verbose_name='Алергены',
-        blank=True)       
+        blank=True)
     ingredients = models.ManyToManyField(
         Ingredient,
         through='RecipeIngredient',
@@ -98,14 +101,11 @@ class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
     ingredient_quantity = models.IntegerField(
-        blank=True, 
-        null=True, 
+        blank=True,
+        null=True,
         verbose_name='Количество ингредиента'
     )
-    
-    class Meta:
-        verbose_name = 'рецепт'
-        verbose_name_plural = 'рецепты'
 
-    def __str__(self):
-        return self.name
+    class Meta:
+        verbose_name = 'ингредиенты рецепта'
+        verbose_name_plural = 'ингредиенты рецепта'
