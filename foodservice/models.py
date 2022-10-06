@@ -102,4 +102,10 @@ class RecipeIngredient(models.Model):
         null=True, 
         verbose_name='Количество ингредиента'
     )
+    
+    class Meta:
+        verbose_name = 'рецепт'
+        verbose_name_plural = 'рецепты'
 
+    def __str__(self):
+        return self.name

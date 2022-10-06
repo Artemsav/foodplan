@@ -1,5 +1,4 @@
 from django.contrib import admin
-
 from foodservice.models import User, Allergen, Ingredient, RecipeCategory, Recipe, RecipeIngredient
 
 class RecipeAdmin(admin.ModelAdmin):
@@ -11,3 +10,4 @@ admin.site.register(Ingredient)
 admin.site.register(RecipeCategory)
 admin.site.register(Recipe, RecipeAdmin)
 admin.site.register(RecipeIngredient)
+
