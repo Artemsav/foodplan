@@ -1,6 +1,6 @@
 bundles/**
 node_modules/
-media/
+#media/
 .DS_Store
 .idea
 venv
