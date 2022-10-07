@@ -105,6 +105,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTHENTICATION_BACKENDS = ('foodservice.models.EmailBackend',)
 
+LOGOUT_REDIRECT_URL = '/'
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/

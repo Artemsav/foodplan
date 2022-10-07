@@ -9,7 +9,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', render, kwargs={'template_name': 'index.html'}, name='start_page'),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('accounts/profile/', render, kwargs={'template_name': 'lk.html'}, name='profile')
+    path('accounts/profile/', render, kwargs={'template_name': 'lk.html'}, name='profile'),
+    path('order/', render, kwargs={'template_name': 'order.html'}, name='order'),
+    path('register/', render, kwargs={'template_name': 'registration.html'}, name='register'),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
