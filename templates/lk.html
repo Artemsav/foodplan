@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
 
 <head>
     <meta charset="UTF-8">
@@ -15,9 +16,9 @@
         <nav class="navbar navbar-expand-md navbar-light fixed-top navbar__opacity">
             <div class="container">
                 <a class="navbar-brand" href="#">
-                    <img src="img/logo.8d8f24edbb5f.svg" height="55" width="189" alt="">
+                    <img src="{% static 'logo.8d8f24edbb5f.svg' %}" height="55" width="189" alt="">
                 </a>
-                <button class="btn btn-outline-success foodplan_green foodplan__border_green">Выйти</button>
+                <button class="btn btn-outline-success shadow-none foodplan_green foodplan__border_green">Выйти</button>
             </div>
         </nav>
     </header>
@@ -40,7 +41,7 @@
                         </div>
                         <h3 class="card-title text-center">Tim</h3>
                         <div class="d-block">
-                            <button class="btn btn-outline-success foodplan_green foodplan__border_green">Выйти</button>
+                            <button class="btn btn-outline-success shadow-none foodplan_green foodplan__border_green">Выйти</button>
                         </div>
                     </div>
 
@@ -82,7 +83,7 @@
                                             <input type="password" class="form-control" id="PasswordConfirm">
                                         </div>
                                         <div class="d-block">
-                                            <button type="submit" class="btn btn-outline-success foodplan_green foodplan__border_green">Сохранить
+                                            <button type="submit" class="btn shadow-none btn-outline-success foodplan_green foodplan__border_green">Сохранить
                                                 изменения</button>
                                         </div>
                                     </form>
@@ -135,7 +136,7 @@
         <nav class="navbar navbar-expand-md navbar-light mt-5">
             <div class="container p-2">
                 <a class="navbar-brand" href="#">
-                    <img src="img/logo.8d8f24edbb5f.svg" height="55" width="189" alt="">
+                    <img src="{% static 'logo.8d8f24edbb5f.svg' %}" height="55" width="189" alt="">
                 </a>
                 <div class="footer__sideBtns d-flex">
                     <a href="#">
