@@ -17,14 +17,26 @@ class User(models.Model):
         return self.username
 
 
-class Allergie(models.Model):
-    name = models.CharField(max_length=25, verbose_name='Название алергии')
-    allergic_users = models.ManyToManyField(
-        User,
-        verbose_name='Аллергии',
-        related_name='allergies',
-        blank=True,
-    )
+class Allergen(models.Model):
+    name = models.CharField(max_length=25, verbose_name='Название алергена')
+
+    class Meta:
+        verbose_name = 'аллерген'
+        verbose_name_plural = 'аллергены'
+
+    def __str__(self):
+        return self.name
+
+
+class Ingredient(models.Model):
+    name = models.CharField(max_length=25, verbose_name="Название ингредиента")
+
+    class Meta:
+        verbose_name = "Ингредиент"
+        verbose_name_plural = "Ингредиенты"
+
+    def __str__(self):
+        return self.name
 
 
 class RecipeCategory(models.Model):
@@ -42,13 +54,21 @@ class RecipeCategory(models.Model):
 
 
 class Recipe(models.Model):
-    name = models.CharField(max_length=25, verbose_name='Название рецепта')
+    name = models.CharField(max_length=50, verbose_name='Название рецепта')
     calories = models.DecimalField(max_digits=7, decimal_places=2)
-    proteins = models.DecimalField(max_digits=5, decimal_places=2)
-    fats = models.DecimalField(max_digits=5, decimal_places=2)
-    carbs = models.DecimalField(max_digits=5, decimal_places=2)
+    proteins = models.DecimalField(
+        max_digits=5, decimal_places=2, blank=True, null=True,)
+    fats = models.DecimalField(
+        max_digits=5, decimal_places=2, blank=True, null=True,)
+    carbs = models.DecimalField(
+        max_digits=5, decimal_places=2, blank=True, null=True,)
     image = models.ImageField(
         'картинка'
+    )
+    description = models.TextField(
+        'описание',
+        max_length=3000,
+        blank=True,
     )
     category = models.ForeignKey(
         RecipeCategory,
@@ -58,10 +78,15 @@ class Recipe(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
     )
-    description = models.TextField(
-        'описание',
-        max_length=200,
-        blank=True,
+    allergens = models.ManyToManyField(
+        Allergen,
+        related_name='recipes_with_allergen',
+        verbose_name='Алергены',
+        blank=True)
+    ingredients = models.ManyToManyField(
+        Ingredient,
+        through='RecipeIngredient',
+        through_fields=('recipe', 'ingredient'),
     )
 
     class Meta:
@@ -70,3 +95,17 @@ class Recipe(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class RecipeIngredient(models.Model):
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
+    ingredient_quantity = models.IntegerField(
+        blank=True,
+        null=True,
+        verbose_name='Количество ингредиента'
+    )
+
+    class Meta:
+        verbose_name = 'ингредиенты рецепта'
+        verbose_name_plural = 'ингредиенты рецепта'
