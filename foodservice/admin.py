@@ -1,5 +1,5 @@
 from django.contrib import admin
-from foodservice.models import User, Allergen, Ingredient, RecipeCategory, Recipe, RecipeIngredient
+from foodservice.models import Allergen, Ingredient, RecipeCategory, Recipe, RecipeIngredient
 
 
 class AllergenInline(admin.TabularInline):
@@ -21,7 +21,6 @@ class RecipeAdmin(admin.ModelAdmin):
     exclude = ('allergens',)
 
 
-admin.site.register(User)
 admin.site.register(Allergen, AllergenAdmin)
 admin.site.register(Ingredient)
 admin.site.register(RecipeCategory)

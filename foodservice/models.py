@@ -1,20 +1,28 @@
+from django.contrib.auth.models import User
+from django.core.exceptions import MultipleObjectsReturned
 from django.db import models
-from django.core.validators import MinValueValidator
+from django.contrib.auth.backends import ModelBackend, UserModel
 
 
-class User(models.Model):
-    username = models.CharField(max_length=25, verbose_name='Имя пользователя')
-    coocking_for = models.IntegerField(
-        'На скольких готовим',
-        validators=[MinValueValidator(0)]
-    )
+class EmailBackend(ModelBackend):
+    def authenticate(self, request, username=None, password=None, **kwargs):
+        try:
+            user = UserModel.objects.get(email__iexact=username)
+        except UserModel.DoesNotExist:
+            UserModel().set_password(password)
+        except MultipleObjectsReturned:
+            return User.objects.filter(email=username).order_by('id').first()
+        else:
+            if user.check_password(password) and self.user_can_authenticate(user):
+                return user
 
-    class Meta:
-        verbose_name = 'пользователь'
-        verbose_name_plural = 'пользователи'
+    def get_user(self, user_id):
+        try:
+            user = UserModel.objects.get(pk=user_id)
+        except UserModel.DoesNotExist:
+            return None
 
-    def __str__(self):
-        return self.username
+        return user if self.user_can_authenticate(user) else None
 
 
 class Allergen(models.Model):
@@ -29,7 +37,10 @@ class Allergen(models.Model):
 
 
 class Ingredient(models.Model):
-    name = models.CharField(max_length=25, verbose_name="Название ингредиента")
+    name = models.CharField(
+        max_length=25,
+        verbose_name="Название ингредиента"
+    )
 
     class Meta:
         verbose_name = "Ингредиент"
@@ -54,14 +65,32 @@ class RecipeCategory(models.Model):
 
 
 class Recipe(models.Model):
-    name = models.CharField(max_length=50, verbose_name='Название рецепта')
-    calories = models.DecimalField(max_digits=7, decimal_places=2)
+    name = models.CharField(
+        max_length=50,
+        verbose_name='Название рецепта'
+    )
+    calories = models.DecimalField(
+        max_digits=7,
+        decimal_places=2
+    )
     proteins = models.DecimalField(
-        max_digits=5, decimal_places=2, blank=True, null=True,)
+        max_digits=5,
+        decimal_places=2,
+        blank=True,
+        null=True,
+    )
     fats = models.DecimalField(
-        max_digits=5, decimal_places=2, blank=True, null=True,)
+        max_digits=5,
+        decimal_places=2,
+        blank=True,
+        null=True,
+    )
     carbs = models.DecimalField(
-        max_digits=5, decimal_places=2, blank=True, null=True,)
+        max_digits=5,
+        decimal_places=2,
+        blank=True,
+        null=True,
+    )
     image = models.ImageField(
         'картинка'
     )
@@ -98,8 +127,14 @@ class Recipe(models.Model):
 
 
 class RecipeIngredient(models.Model):
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
-    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
+    recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE
+    )
+    ingredient = models.ForeignKey(
+        Ingredient,
+        on_delete=models.CASCADE
+    )
     ingredient_quantity = models.IntegerField(
         blank=True,
         null=True,
