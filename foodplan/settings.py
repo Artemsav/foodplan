@@ -103,7 +103,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LOGIN_REDIRECT_URL = '/lk/'
+AUTHENTICATION_BACKENDS = ('foodservice.models.EmailBackend',)
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
