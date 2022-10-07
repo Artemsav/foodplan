@@ -26,7 +26,10 @@ class EmailBackend(ModelBackend):
 
 
 class Allergen(models.Model):
-    name = models.CharField(max_length=25, verbose_name='Название алергена')
+    name = models.CharField(
+        max_length=25,
+        verbose_name='Название алергена'
+    )
 
     class Meta:
         verbose_name = 'аллерген'
