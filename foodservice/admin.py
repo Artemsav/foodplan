@@ -1,5 +1,5 @@
 from django.contrib import admin
-from foodservice.models import Allergen, Ingredient, RecipeCategory, MenuType, Recipe, RecipeIngredient
+from foodservice.models import Allergen, Ingredient, RecipeCategory, MenuType, Recipe, RecipeIngredient, SubscriptionType
 
 
 class AllergenInline(admin.TabularInline):
@@ -21,6 +21,11 @@ class RecipeAdmin(admin.ModelAdmin):
     exclude = ('allergens',)
 
 
+class SubscriptionTypeAdmin(admin.ModelAdmin):
+    list_display = ('name', 'term', 'price',)
+
+
+admin.site.register(SubscriptionType, SubscriptionTypeAdmin)
 admin.site.register(Allergen, AllergenAdmin)
 admin.site.register(Ingredient)
 admin.site.register(RecipeCategory)

@@ -1,4 +1,7 @@
-from foodservice.models import Recipe, RecipeIngredient
+from django.shortcuts import render
+
+from foodservice.models import (Allergen, Recipe, RecipeIngredient,
+                                SubscriptionType)
 
 
 def serialize_recipe(recipe):
@@ -28,3 +31,23 @@ def card(request):
         ]
     }
     return (request, 'card1.html', context)
+
+
+def get_subscription(request):
+    terms = set(
+        sub_type.term for sub_type
+        in SubscriptionType.objects.order_by('-term')
+    )
+    allergens = set(
+        (allergen.name, allergen.id) for allergen in Allergen.objects.all()
+    )
+    context = {
+        'subscription_options': {
+            'terms': terms,
+            'allergens': allergens
+        }
+    }
+    if request.method == 'POST':
+        # добавление подписки в БД
+        pass
+    return render(request, template_name="order.html", context=context)

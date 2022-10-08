@@ -1,19 +1,21 @@
+from django.contrib.auth.backends import ModelBackend, UserModel
 from django.contrib.auth.models import User
 from django.core.exceptions import MultipleObjectsReturned
 from django.db import models
-from django.contrib.auth.backends import ModelBackend, UserModel
+from django.db.models import Q
 
 
 class EmailBackend(ModelBackend):
     def authenticate(self, request, username=None, password=None, **kwargs):
         try:
-            user = UserModel.objects.get(email__iexact=username)
+            user = UserModel.objects.get(Q(email__iexact=username))
         except UserModel.DoesNotExist:
             UserModel().set_password(password)
         except MultipleObjectsReturned:
             return User.objects.filter(email=username).order_by('id').first()
         else:
-            if user.check_password(password) and self.user_can_authenticate(user):
+            if user.check_password(password) \
+                    and self.user_can_authenticate(user):
                 return user
 
     def get_user(self, user_id):
@@ -175,3 +177,51 @@ class RecipeIngredient(models.Model):
     class Meta:
         verbose_name = 'ингредиенты рецепта'
         verbose_name_plural = 'ингредиенты рецепта'
+
+
+class SubscriptionType(models.Model):
+    name = models.CharField(
+        max_length=35
+    )
+    term = models.IntegerField(
+        verbose_name='Срок подписки',
+    )
+    price = models.IntegerField()
+
+    class Meta:
+        verbose_name = 'тип подписки'
+        verbose_name_plural = 'типы подписки'
+
+
+class Subscription(models.Model):
+    client = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name='Клиент',
+        related_name='subscritions'
+    )
+    dishes = models.IntegerField(
+        verbose_name='Количество блюд',
+    )
+    created_at = models.TimeField(
+        verbose_name='Дата создания',
+        auto_now_add=True
+    )
+    type = models.ForeignKey(
+        SubscriptionType,
+        on_delete=models.SET_NULL,
+        verbose_name='Клиент',
+        related_name='subscritions',
+        null=True
+    )
+    allergens = models.ManyToManyField(
+        Allergen,
+        related_name='subscriptions',
+        verbose_name='Алергены',
+        blank=True
+    )
+    price_total = models.IntegerField()
+
+    class Meta:
+        verbose_name = 'подписка'
+        verbose_name_plural = 'подписки'
