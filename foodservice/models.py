@@ -67,6 +67,20 @@ class RecipeCategory(models.Model):
         return self.name
 
 
+class MenuType(models.Model):
+    name = models.CharField(
+        'название',
+        max_length=50
+    )
+
+    class Meta:
+        verbose_name = 'тип меню'
+        verbose_name_plural = 'тип меню'
+
+    def __str__(self):
+        return self.name
+
+
 class Recipe(models.Model):
     name = models.CharField(
         max_length=50,
@@ -110,6 +124,14 @@ class Recipe(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
     )
+    menu = models.ForeignKey(
+        MenuType,
+        verbose_name='тип меню',
+        related_name='menu_recipes',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
     allergens = models.ManyToManyField(
         Allergen,
         related_name='recipes_with_allergen',
@@ -142,6 +164,12 @@ class RecipeIngredient(models.Model):
         blank=True,
         null=True,
         verbose_name='Количество ингредиента'
+    )
+    ingredient_measure = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True,
+        verbose_name="Единица измерения"
     )
 
     class Meta:
