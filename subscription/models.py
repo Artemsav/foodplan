@@ -33,13 +33,22 @@ class Subscription(models.Model):
     created_at = models.TimeField(
         verbose_name='Дата создания',
         auto_now_add=True,
+    )
+    paid_till = models.TimeField(
+        verbose_name='Оплачено до',
+        blank=True,
         null=True
     )
+    status = models.BooleanField(
+        verbose_name='Активна',
+        default=True
+    )
+
     type = models.ForeignKey(
         SubscriptionType,
         on_delete=models.SET_NULL,
-        verbose_name='Клиент',
-        related_name='subscritions',
+        verbose_name='Тип подписки',
+        related_name='subscriptions',
         null=True
     )
     breakfast = models.BooleanField(
