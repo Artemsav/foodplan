@@ -1,7 +1,12 @@
 from django.shortcuts import render
+from django.urls import reverse
+from django.db import transaction
+from django.http import HttpResponseRedirect
 
-from foodservice.models import (Allergen, Recipe, RecipeIngredient,
-                                SubscriptionType)
+
+from foodservice.models import (Allergen, Recipe, RecipeIngredient)
+
+
 
 
 def serialize_recipe(recipe):
@@ -31,23 +36,3 @@ def card(request):
         ]
     }
     return (request, 'card1.html', context)
-
-
-def get_subscription(request):
-    terms = set(
-        sub_type.term for sub_type
-        in SubscriptionType.objects.order_by('-term')
-    )
-    allergens = set(
-        (allergen.name, allergen.id) for allergen in Allergen.objects.all()
-    )
-    context = {
-        'subscription_options': {
-            'terms': terms,
-            'allergens': allergens
-        }
-    }
-    if request.method == 'POST':
-        # добавление подписки в БД
-        pass
-    return render(request, template_name="order.html", context=context)

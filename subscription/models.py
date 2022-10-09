@@ -1,21 +1,73 @@
+
 from django.db import models
-from django.utils import timezone
+from foodservice.models import Allergen, User
+
+
+class SubscriptionType(models.Model):
+    name = models.CharField(
+        max_length=35
+    )
+    term = models.IntegerField(
+        verbose_name='Срок подписки',
+    )
+    price = models.IntegerField()
+
+    class Meta:
+        verbose_name = 'тип подписки'
+        verbose_name_plural = 'типы подписки'
+
+    def __str__(self):
+        return self.name
 
 
 class Subscription(models.Model):
-    name = models.CharField(max_length=25, verbose_name='Название подписки')
-    status = models.BooleanField(
-        'Статус подписки',
-        default=False,
-        db_index=True
+    client = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name='Клиент',
+        related_name='subscritions',
     )
-    start_at = models.DateTimeField(
-        'Дата оформления подписки',
-        default=timezone.now,
-        db_index=True
-        )
-    ended_at = models.DateTimeField(
-        'Дата окончания подписки',
-        default=timezone.now,
-        db_index=True
-        )
+    dishes = models.IntegerField(
+        verbose_name='Количество блюд',
+    )
+    created_at = models.TimeField(
+        verbose_name='Дата создания',
+        auto_now_add=True,
+        null=True
+    )
+    type = models.ForeignKey(
+        SubscriptionType,
+        on_delete=models.SET_NULL,
+        verbose_name='Клиент',
+        related_name='subscritions',
+        null=True
+    )
+    breakfast = models.BooleanField(
+        verbose_name='Завтрак',
+        default=True
+    )
+    dinner = models.BooleanField(
+        verbose_name='Обед',
+        default=True)
+    supper = models.BooleanField(
+        verbose_name='Ужин',
+        default=True
+    )
+    desert = models.BooleanField(
+        verbose_name='Десерт',
+        default=True
+    )
+    allergens = models.ManyToManyField(
+        Allergen,
+        related_name='subscriptions',
+        verbose_name='Алергены',
+        blank=True
+    )
+    price_total = models.IntegerField()
+
+    class Meta:
+        verbose_name = 'подписка'
+        verbose_name_plural = 'подписки'
+
+    def __str__(self):
+        return str(self.type)

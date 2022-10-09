@@ -75,8 +75,8 @@
                             <th scope="row" class="text-start">Завтраки</th>
                             <td>
                                 <select name="breakfast" class="form-select">
-                                    <option value="0" selected>&#10004;</option>
-                                    <option value="1">&#10008;</option>
+                                    <option value="1" selected>&#10004;</option>
+                                    <option value="0">&#10008;</option>
                                 </select>
                             </td>
                         </tr>
@@ -84,8 +84,8 @@
                             <th scope="row" class="text-start">Обеды</th>
                             <td>
                                 <select name="dinner" class="form-select">
-                                    <option value="0" selected>&#10004;</option>
-                                    <option value="1">&#10008;</option>
+                                    <option value="1" selected>&#10004;</option>
+                                    <option value="0">&#10008;</option>
                                 </select>
                             </td>
                         </tr>
@@ -93,8 +93,8 @@
                             <th scope="row" class="text-start">Ужины</th>
                             <td>
                                 <select name="supper" class="form-select">
-                                    <option value="0" selected>&#10004;</option>
-                                    <option value="1">&#10008;</option>
+                                    <option value="1" selected>&#10004;</option>
+                                    <option value="0">&#10008;</option>
                                 </select>
                             </td>
                         </tr>
@@ -102,8 +102,8 @@
                             <th scope="row" class="text-start">Десерты</th>
                             <td>
                                 <select name="desert" class="form-select">
-                                    <option value="0" selected>&#10004;</option>
-                                    <option value="1">&#10008;</option>
+                                    <option value="1" selected>&#10004;</option>
+                                    <option value="0">&#10008;</option>
                                 </select>
                             </td>
                         </tr>
@@ -111,12 +111,12 @@
                             <th scope="row" class="text-start">Кол-во персон</th>
                             <td>
                                 <select name="dishes" class="form-select">
-                                    <option value="0" selected>1</option>
-                                    <option value="1">2</option>
-                                    <option value="2">3</option>
-                                    <option value="3">4</option>
-                                    <option value="4">5</option>
-                                    <option value="5">6</option>
+                                    <option value="1" selected>1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
                                 </select>
                             </td>
                         </tr>
@@ -125,8 +125,8 @@
                             <td>
                                 {% for allergen in subscription_options.allergens %}
                                 <div class="form-check d-flex justify-content-start">
-                                    <input class="form-check-input me-1 foodplan_checked-green" type="checkbox" value="{{ allergen.1 }}" name="allergy">
-                                    <label class="form-check-label" for="allergy1">
+                                    <input class="form-check-input me-1 foodplan_checked-green" type="checkbox" value="{{ allergen.1 }}" name="allergies">
+                                    <label class="form-check-label" for="allergies">
                                         {{ allergen.0 }}
                                     </label>
                                 </div>
@@ -135,6 +135,7 @@
                         </tr>
                     </tbody>
                 </table>
+                <input type="hidden" name="next" value="{{ request.path }}">
                 <button type="submit" id="TableSubmit" class="d-none"></button>
                 </form>
 

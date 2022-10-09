@@ -2,7 +2,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.shortcuts import render
 from django.urls import include, path
-from foodservice import views
+from subscription import views
 
 from . import settings
 
