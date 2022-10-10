@@ -44,7 +44,9 @@ def selected_recipes(sub):
         supper_receipe = Recipe.objects.none()
     if sub.desert:
         desert_receipe = RecipeCategory.objects.get(name='Десерт')\
-            .recipes.order_by('?')[:1]       
+            .recipes.order_by('?')[:1]   
+    else:
+        desert_receipe = Recipe.objects.none()           
     return breakfast_receipe | dinner_receipe | supper_receipe | desert_receipe
     # return Recipe.objects.order_by('?')[:3]
 
