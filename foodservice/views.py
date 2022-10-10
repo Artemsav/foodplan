@@ -9,15 +9,15 @@ def serialize_recipe(recipe):
     ingredients = RecipeIngredient.objects.filter(recipe=recipe)
     serialized_ingredients = []
     for ingredient in ingredients:
-        serialized_ingredients.append({
-            'name': ingredient.ingredient.name,
-            'quantity': ingredient.ingredient_quantity,
-        })
+        serialized_ingredients.append(
+            f'{ingredient.ingredient.name}, {str(ingredient.ingredient_quantity)} г')
+
     return {
         'category': recipe.category.name,
         'name': recipe.name,
         'calories': recipe.calories,
         'ingridients': serialized_ingredients,
+        'description': recipe.description
     }
 
 
@@ -43,35 +43,28 @@ def get_account(request):
     sub = Subscription.objects.get(client=request.user, status=True)
     allergens = [allergen.name for allergen in sub.allergens.all()]
 
-    br_ingridients_context = []
-    if sub.breakfast:
-        breakfast_receipe = RecipeCategory.objects.get(name='Завтрак')\
-            .recipes.order_by('?').first()
-        breakfast_ingridients = breakfast_receipe.ingredients.all()
-        br_ingridients_context = [ingridient.name for ingridient
-                                  in breakfast_ingridients]
+    # br_ingridients_context = []
+    # receipts = {}
+    # breakfast_receipe = RecipeCategory.objects.get(name='Завтрак')\
+    #     .recipes.order_by('?').first()
+    # breakfast_ingridients = breakfast_receipe.ingredients.all()
+    # br_ingridients_context = [ingridient.name for ingridient
+    #                           in breakfast_ingridients]
 
-    context = {
-        'subscription': {
-            'name': sub.type.name,
-            'status': 1,
-            'paid_till': sub.paid_till,
-            'allergens': allergens,
-            'dishes': sub.dishes,
-            'breakfast': sub.breakfast,
-            'dinner': sub.dinner,
-            'supper': sub.supper,
-            'desert': sub.desert
-        },
-        'receipts': {
-            'breakfast': {
-                'name': breakfast_receipe.name,
-                'description': breakfast_receipe.description,
-                'ingridients': br_ingridients_context,
-                'calories': breakfast_receipe.calories,
-            }
-        }
-
-    }
-
+    context = {'subscription':
+               {'name': sub.type.name,
+                   'status': 1,
+                   'paid_till': sub.paid_till,
+                   'allergens': allergens,
+                   'dishes': sub.dishes,
+                   'breakfast': sub.breakfast,
+                   'dinner': sub.dinner,
+                   'supper': sub.supper,
+                   'desert': sub.desert
+                },
+               'selected_recipes': [
+                   # в функцию будем передавать данные подписки, она возвращает рецепты
+                   serialize_recipe(recipe) for recipe in selected_recipes(1, 1)
+               ]
+               }
     return render(request, template_name="lk.html", context=context)
