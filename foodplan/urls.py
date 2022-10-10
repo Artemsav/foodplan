@@ -13,7 +13,7 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/profile/', fs_views.get_account, name='profile'),
     path('order/', subs_views.get_subscription, name='order'),
-    path('register/', render, kwargs={'template_name': 'registration.html'}, name='register'),
+    path('register/', fs_views.register_user, name='register'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
