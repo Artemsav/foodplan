@@ -28,14 +28,14 @@ ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', ['127.0.0.1', 'localhost'])
 # Application definition
 
 INSTALLED_APPS = [
+    'foodservice',
+    'subscription',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'foodservice',
-    'subscription',
 ]
 
 MIDDLEWARE = [
@@ -105,6 +105,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTHENTICATION_BACKENDS = ('foodservice.models.EmailBackend',)
 
+LOGOUT_REDIRECT_URL = '/'
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
@@ -124,8 +126,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-'''if not DEBUG:
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static/')'''
+if not DEBUG:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static/'),
