@@ -77,7 +77,7 @@ def register_user(request):
     context = {}
     if request.method == 'POST':
         form = request.POST
-        if not User.objects.filter(username=form['username']).exists():
+        if not User.objects.filter(email=form['email']).exists():
             user = User.objects.create_user(
                 username=form['username'],
                 password=form['password'],
