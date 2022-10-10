@@ -138,6 +138,7 @@ class Recipe(models.Model):
         Allergen,
         related_name='recipes_with_allergen',
         verbose_name='Алергены',
+        null=True,
         blank=True)
     ingredients = models.ManyToManyField(
         Ingredient,
