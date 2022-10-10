@@ -1,19 +1,21 @@
+from django.contrib.auth.backends import ModelBackend, UserModel
 from django.contrib.auth.models import User
 from django.core.exceptions import MultipleObjectsReturned
 from django.db import models
-from django.contrib.auth.backends import ModelBackend, UserModel
+from django.db.models import Q
 
 
 class EmailBackend(ModelBackend):
     def authenticate(self, request, username=None, password=None, **kwargs):
         try:
-            user = UserModel.objects.get(email__iexact=username)
+            user = UserModel.objects.get(Q(email__iexact=username))
         except UserModel.DoesNotExist:
             UserModel().set_password(password)
         except MultipleObjectsReturned:
             return User.objects.filter(email=username).order_by('id').first()
         else:
-            if user.check_password(password) and self.user_can_authenticate(user):
+            if user.check_password(password) \
+                    and self.user_can_authenticate(user):
                 return user
 
     def get_user(self, user_id):
@@ -26,7 +28,10 @@ class EmailBackend(ModelBackend):
 
 
 class Allergen(models.Model):
-    name = models.CharField(max_length=25, verbose_name='Название алергена')
+    name = models.CharField(
+        max_length=25,
+        verbose_name='Название алергена'
+    )
 
     class Meta:
         verbose_name = 'аллерген'
@@ -59,6 +64,20 @@ class RecipeCategory(models.Model):
     class Meta:
         verbose_name = 'категория'
         verbose_name_plural = 'категории'
+
+    def __str__(self):
+        return self.name
+
+
+class MenuType(models.Model):
+    name = models.CharField(
+        'название',
+        max_length=50
+    )
+
+    class Meta:
+        verbose_name = 'тип меню'
+        verbose_name_plural = 'тип меню'
 
     def __str__(self):
         return self.name
@@ -107,6 +126,14 @@ class Recipe(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
     )
+    menu = models.ForeignKey(
+        MenuType,
+        verbose_name='тип меню',
+        related_name='menu_recipes',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
     allergens = models.ManyToManyField(
         Allergen,
         related_name='recipes_with_allergen',
@@ -139,6 +166,12 @@ class RecipeIngredient(models.Model):
         blank=True,
         null=True,
         verbose_name='Количество ингредиента'
+    )
+    ingredient_measure = models.CharField(
+        max_length=30,
+        blank=True,
+        null=True,
+        verbose_name="Единица измерения"
     )
 
     class Meta:

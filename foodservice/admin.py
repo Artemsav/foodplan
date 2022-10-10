@@ -1,5 +1,5 @@
 from django.contrib import admin
-from foodservice.models import Allergen, Ingredient, RecipeCategory, Recipe, RecipeIngredient
+from foodservice.models import Allergen, Ingredient, RecipeCategory, MenuType, Recipe, RecipeIngredient
 
 
 class AllergenInline(admin.TabularInline):
@@ -24,5 +24,6 @@ class RecipeAdmin(admin.ModelAdmin):
 admin.site.register(Allergen, AllergenAdmin)
 admin.site.register(Ingredient)
 admin.site.register(RecipeCategory)
+admin.site.register(MenuType)
 admin.site.register(Recipe, RecipeAdmin)
 admin.site.register(RecipeIngredient)
