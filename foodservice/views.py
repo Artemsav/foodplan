@@ -1,4 +1,7 @@
+from django.contrib.auth.models import User
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
 
 from foodservice.models import (Allergen, Recipe, RecipeCategory,
                                 RecipeIngredient)
@@ -68,3 +71,22 @@ def get_account(request):
                ]
                }
     return render(request, template_name="lk.html", context=context)
+
+
+def register_user(request):
+    context = {}
+    if request.method == 'POST':
+        form = request.POST
+        if not User.objects.filter(username=form['username']).exists():
+            user = User.objects.create_user(
+                username=form['username'],
+                password=form['password'],
+                email=form['email']
+            )
+            user.save()
+            return HttpResponseRedirect(reverse('login'))
+        else:
+            context = {
+                'error': 'Такой пользователь существует'
+            }
+    return render(request, template_name="registration.html", context=context)
