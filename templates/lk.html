@@ -126,22 +126,24 @@
                             </div>
                     </div>
                     <div class="col-12 col-md-8 d-flex flex-column justify-content-between">
+                        {% for selected_recipe in selected_recipes %}
                         <div class="row">
-                            <h2>Завтрак</h2>
-                            <h2>{{ receipts.breakfast.name }}</h2>
+                            <h2>{{ selected_recipe.category }}</h2>
+                            <h2>{{ selected_recipe.name }}</h2>
                             <div class="col-12 col-sm-8">
-                                <h6>{{ receipts.breakfast.description }}</h6>
+                                <h6>{{ selected_recipe.description }}</h6>
                             </div>
                             <div class="col-12 col-sm-4">
                                 <small class="link-secondary">Ингредиенты:</small>
                                 <ul class="list-group list-group-flush">
-                                    {% for ingridient in receipts.breakfast.ingridients %}
+                                    {% for ingridient in selected_recipe.ingridients %}
                                     <li class="list-group-item disabled"><small>{{ ingridient }}</small></li>
                                     {% endfor%}
                                 </ul>
-                                <small class="link-secondary">Общая калорийность: {{ receipts.breakfast.calories }} ккал </small>
+                                <small class="link-secondary">Общая калорийность: {{ selected_recipe.calories }} ккал </small>
                             </div>
                         </div>
+                        {% endfor%}
                     </div>
                 </div>
             </div>
