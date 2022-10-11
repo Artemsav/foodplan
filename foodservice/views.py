@@ -47,6 +47,11 @@ def selected_recipes(sub):
 
 
 def get_account(request):
+    if request.method == "POST":
+        print(request.POST)
+        if request.POST['delete_sub']:
+            sub_to_delete = Subscription.objects.filter(client=request.user)
+            sub_to_delete.delete()
     if not Subscription.objects.filter(client=request.user, status=True).exists():
         context = {
             'subscription_status': 0

@@ -72,6 +72,16 @@
                             </td>
                         </tr>
                         <tr>
+                            <th scope="row" class="text-start">Тип меню</th>
+                            <td>
+                                <select name="menu_type" class="form-select">
+                                    {% for type in subscription_options.menu_types %}
+                                    <option value="{{ type.0 }}" selected>{{ type.0 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
                             <th scope="row" class="text-start">Завтраки</th>
                             <td>
                                 <select name="breakfast" class="form-select">

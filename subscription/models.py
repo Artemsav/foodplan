@@ -1,6 +1,6 @@
 
 from django.db import models
-from foodservice.models import Allergen, User
+from foodservice.models import Allergen, User, MenuType
 
 
 class SubscriptionType(models.Model):
@@ -43,11 +43,17 @@ class Subscription(models.Model):
         verbose_name='Активна',
         default=True
     )
-
     type = models.ForeignKey(
         SubscriptionType,
         on_delete=models.SET_NULL,
         verbose_name='Тип подписки',
+        related_name='subscriptions',
+        null=True
+    )
+    menu_type = models.ForeignKey(
+        MenuType,
+        on_delete=models.SET_NULL,
+        verbose_name='Тип меню',
         related_name='subscriptions',
         null=True
     )
