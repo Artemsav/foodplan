@@ -80,7 +80,7 @@ def load_data():
             if len(portions) > 1:
                 portions = portions[-1]
             recipes[title] = {
-                'image_url': f'media/{image_name}',
+                'image_url': f'{image_name}',
                 'detailed_description': detailed_description,
                 'categorys': categorys,
                 'ingredients': ingredients,
