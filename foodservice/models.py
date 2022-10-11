@@ -1,3 +1,4 @@
+from enum import unique
 from django.contrib.auth.backends import ModelBackend, UserModel
 from django.contrib.auth.models import User
 from django.core.exceptions import MultipleObjectsReturned
@@ -44,7 +45,8 @@ class Allergen(models.Model):
 class Ingredient(models.Model):
     name = models.CharField(
         max_length=25,
-        verbose_name="Название ингредиента"
+        verbose_name="Название ингредиента",
+        unique=True
     )
 
     class Meta:
@@ -138,7 +140,6 @@ class Recipe(models.Model):
         Allergen,
         related_name='recipes_with_allergen',
         verbose_name='Алергены',
-        null=True,
         blank=True)
     ingredients = models.ManyToManyField(
         Ingredient,
