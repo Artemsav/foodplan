@@ -13,7 +13,7 @@ def serialize_recipe(recipe):
     serialized_ingredients = []
     for ingredient in ingredients:
         serialized_ingredients.append(
-            f'{ingredient.ingredient.name}, {str(ingredient.ingredient_quantity)} г')
+            f'{ingredient.ingredient.name}, {str(ingredient.ingredient_quantity)} {str(ingredient.ingredient_measure)}') 
 
     return {
         'category': recipe.category.name,
@@ -26,7 +26,7 @@ def serialize_recipe(recipe):
 
 
 def selected_recipes(sub):
-    recipes = Recipe.objects.exclude(allergens__in=sub.allergens.all())
+    recipes = Recipe.objects.exclude(allergens__in=sub.allergens.all()).filter(menu = sub.menu_type)
     if sub.breakfast:
         breakfast_receipe = recipes.filter(category__name='Завтрак').order_by('?')[:1]
     else:
