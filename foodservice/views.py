@@ -1,4 +1,7 @@
+from django.contrib.auth.models import User
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
 
 from foodservice.models import (Allergen, Recipe, RecipeCategory,
                                 RecipeIngredient)
@@ -17,24 +20,38 @@ def serialize_recipe(recipe):
         'name': recipe.name,
         'calories': recipe.calories,
         'ingridients': serialized_ingredients,
-        'description': recipe.description
+        'description': recipe.description,
+        'image_url' : recipe.image.url
     }
 
 
-def selected_recipes(allergen, menu_types):
-    return Recipe.objects.order_by('?')[:3]
-
-
-def card(request):
-    context = {
-        'selected_recipes': [
-            serialize_recipe(recipe) for recipe in selected_recipes(1, 1)
-        ]
-    }
-    return (request, 'card1.html', context)
+def selected_recipes(sub):
+    recipes = Recipe.objects.exclude(allergens__in=sub.allergens.all())
+    if sub.breakfast:
+        breakfast_receipe = recipes.filter(category__name='Завтрак').order_by('?')[:1]
+    else:
+        breakfast_receipe = Recipe.objects.none()
+    if sub.dinner:
+        dinner_receipe = recipes.filter(category__name='Обед').order_by('?')[:1]
+    else:
+        dinner_receipe = Recipe.objects.none()
+    if sub.supper:
+        supper_receipe = recipes.filter(category__name='Ужин').order_by('?')[:1]
+    else:
+        supper_receipe = Recipe.objects.none()
+    if sub.desert:
+        desert_receipe =  recipes.filter(category__name='Десерт').order_by('?')[:1]
+    else:
+        desert_receipe = Recipe.objects.none()           
+    return breakfast_receipe | dinner_receipe | supper_receipe | desert_receipe
 
 
 def get_account(request):
+    if request.method == "POST":
+        print(request.POST)
+        if request.POST['delete_sub']:
+            sub_to_delete = Subscription.objects.filter(client=request.user)
+            sub_to_delete.delete()
     if not Subscription.objects.filter(client=request.user, status=True).exists():
         context = {
             'subscription_status': 0
@@ -64,7 +81,26 @@ def get_account(request):
                 },
                'selected_recipes': [
                    # в функцию будем передавать данные подписки, она возвращает рецепты
-                   serialize_recipe(recipe) for recipe in selected_recipes(1, 1)
+                   serialize_recipe(recipe) for recipe in selected_recipes(sub)
                ]
                }
     return render(request, template_name="lk.html", context=context)
+
+
+def register_user(request):
+    context = {}
+    if request.method == 'POST':
+        form = request.POST
+        if not User.objects.filter(email=form['email']).exists():
+            user = User.objects.create_user(
+                username=form['username'],
+                password=form['password'],
+                email=form['email']
+            )
+            user.save()
+            return HttpResponseRedirect(reverse('login'))
+        else:
+            context = {
+                'error': 'Такой пользователь существует'
+            }
+    return render(request, template_name="registration.html", context=context)
