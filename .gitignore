@@ -11,7 +11,6 @@ __pycache__/
 
 # C extensions
 *.so
-db.sqlite3
 # Distribution / packaging
 .Python
 build/
