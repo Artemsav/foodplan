@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+План питания на неделю, меню, рецепты, список покупок. Классическое меню, безуглеводное меню
+{% endblock title %}
+{% block content %}
+    <main style="margin-top: calc(2rem + 75px);">
+        <section>
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-md-4 d-flex justify-content-center">
+                        <div class="card foodplan__card_borderless">
+                            <img src="img/circle1.png" alt="">
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-8 d-flex flex-column justify-content-between">
+                        {% for selected_recipe in selected_recipes %}
+                        <div class="row">
+                            <h2>{{ selected_recipe.category }}</h2>
+                            <div class="col-2">
+                                <img src="{{selected_recipe.image_url }}" alt="" class="w-100">
+                            </div>
+                            <h2>{{ selected_recipe.name }}</h2>
+                            <div class="col-12 col-sm-6 d-flex flex-column justify-content-between">
+                                <h6>{{ selected_recipe.description|linebreaksbr }}</h6>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <small class="link-secondary">Ингредиенты:</small>
+                                <ul class="list-group list-group-flush">
+                                    {% for ingridient in selected_recipe.ingridients %}
+                                    <li class="list-group-item disabled"><small>{{ ingridient }}</small></li>
+                                    {% endfor%}
+                                </ul>
+                                <small class="link-secondary">Общая калорийность: {{ selected_recipe.calories }} ккал</small>
+                            </div>
+                        </div>
+                        {% endfor%}
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock content %}

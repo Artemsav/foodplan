@@ -13,7 +13,7 @@ def serialize_recipe(recipe):
     serialized_ingredients = []
     for ingredient in ingredients:
         serialized_ingredients.append(
-            f'{ingredient.ingredient.name}, {str(ingredient.ingredient_quantity)} г')
+            f'{ingredient.ingredient.name}, {str(ingredient.ingredient_quantity)} {str(ingredient.ingredient_measure)}')
 
     return {
         'category': recipe.category.name,
@@ -21,34 +21,38 @@ def serialize_recipe(recipe):
         'calories': recipe.calories,
         'ingridients': serialized_ingredients,
         'description': recipe.description,
-        'image_url' : recipe.image.url
+        'image_url': recipe.image.url
     }
 
 
 def selected_recipes(sub):
-    recipes = Recipe.objects.exclude(allergens__in=sub.allergens.all())
+    recipes = Recipe.objects.exclude(
+        allergens__in=sub.allergens.all()).filter(menu=sub.menu_type)
     if sub.breakfast:
-        breakfast_receipe = recipes.filter(category__name='Завтрак').order_by('?')[:1]
+        breakfast_receipe = recipes.filter(
+            category__name='Завтрак').order_by('?')[:1]
     else:
         breakfast_receipe = Recipe.objects.none()
     if sub.dinner:
-        dinner_receipe = recipes.filter(category__name='Обед').order_by('?')[:1]
+        dinner_receipe = recipes.filter(
+            category__name='Обед').order_by('?')[:1]
     else:
         dinner_receipe = Recipe.objects.none()
     if sub.supper:
-        supper_receipe = recipes.filter(category__name='Ужин').order_by('?')[:1]
+        supper_receipe = recipes.filter(
+            category__name='Ужин').order_by('?')[:1]
     else:
         supper_receipe = Recipe.objects.none()
     if sub.desert:
-        desert_receipe =  recipes.filter(category__name='Десерт').order_by('?')[:1]
+        desert_receipe = recipes.filter(
+            category__name='Десерт').order_by('?')[:1]
     else:
-        desert_receipe = Recipe.objects.none()           
+        desert_receipe = Recipe.objects.none()
     return breakfast_receipe | dinner_receipe | supper_receipe | desert_receipe
 
 
 def get_account(request):
     if request.method == "POST":
-        print(request.POST)
         if request.POST['delete_sub']:
             sub_to_delete = Subscription.objects.filter(client=request.user)
             sub_to_delete.delete()
@@ -85,6 +89,16 @@ def get_account(request):
                ]
                }
     return render(request, template_name="lk.html", context=context)
+
+
+def get_recipes(request):
+    sub = Subscription.objects.get(client=request.user, status=True)
+    context = {'selected_recipes': [
+        # в функцию будем передавать данные подписки, она возвращает рецепты
+        serialize_recipe(recipe) for recipe in selected_recipes(sub)
+    ]
+    }
+    return render(request, template_name="recipes.html", context=context)
 
 
 def register_user(request):

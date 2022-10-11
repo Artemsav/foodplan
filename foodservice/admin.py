@@ -16,7 +16,7 @@ class AllergenAdmin(admin.ModelAdmin):
 
 
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'calories', 'category',)
+    list_display = ('name', 'calories', 'category', 'menu')
     inlines = [AllergenInline, RecipeIngredientInline]
     exclude = ('allergens',)
 
