@@ -10,7 +10,6 @@ from subscription.models import Subscription, SubscriptionType
 @transaction.atomic
 def register_subscription(request):
     sub_options = request.POST
-    print(sub_options)
     sub_type = SubscriptionType.objects.get(term=sub_options['term'])
     allergens = [Allergen.objects.get(pk=alergen_id) for alergen_id in
                  sub_options.getlist('allergies')]
