@@ -42,88 +42,95 @@
                     </div>
 
                     <div class="card col-12 col-md-10 p-3 mb-3 foodplan__shadow">
-                            <ul class="nav nav-tabs">
-                                <li class="nav-item foodplan__tab-item">
-                                    <button id="tab2" class="btn shadow-none foodplan__tab-button" data-bs-toggle="tab" data-bs-target="#menu">Мое меню</button>
-                                </li>
-                                <li class="nav-item foodplan__tab-item flex-grow-1"></li>
-                            </ul>
-                            <div class="tab-content mt-2">
-                                <div class="tab-pane fade show active" id="menu">
-                                    <div class="row">
-                                        <div class="col-2">
-                                            <img src="{% static 'img/circle1.png' %}" alt="" class="w-100">
-                                        </div>
-                                        {% if subscription.status %}
-                                        <div class="col-10 col-md-10">
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <h2>Подписка {{ subscription.name }}</h2>
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item foodplan__tab-item">
+                                <button id="tab2" class="btn shadow-none foodplan__tab-button" data-bs-toggle="tab" data-bs-target="#menu">Мое меню</button>
+                            </li>
+                            <li class="nav-item foodplan__tab-item flex-grow-1"></li>
+                        </ul>
+                        <div class="tab-content mt-2">
+                            <div class="tab-pane fade show active" id="menu">
+                                <div class="row">
+                                    <div class="col-2">
+                                        <img src="{% static 'img/circle1.png' %}" alt="" class="w-100">
+                                    </div>
+                                    {% if subscription.status %}
+                                    <div class="col-10 col-md-10">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h2>Подписка {{ subscription.name }}</h2>
+                                            </div>
+                                            <div class="col-md-12 col-lg-9">
+                                                <h6>Ваша подписка оформлена! Получайте новые блюда каждый день </h6>
+                                                <form method="post" action="{% url 'profile' %}">
+                                                    {% csrf_token %}
+                                                    <button type="submit" name="delete_sub" value="1" class="btn shadow-none btn-outline-success foodplan_green foodplan__border_green">Отменить подписку</button>
+                                                </form>
+                                            </div>
+                                            <div class="col-md-12 col-lg-3 text-muted d-flex flex-column justify-content-between">
+                                                <div class="d-flex flex-row justify-content-between">
+                                                    <small>Персоны: </small><small>{{ subscription.dishes }}</small>
                                                 </div>
-                                                <div class="col-md-12 col-lg-9">
-                                                    <h6>Ваша подписка оформлена! Получайте новые блюда каждый день </h6>
-                                                    <form action="{% url 'order' %}">
-                                                        <button class="btn shadow-none btn-outline-success foodplan_green foodplan__border_green">Отменить подписку</button>
-                                                    </form>
+                                                <div class="d-flex flex-row justify-content-between">
+                                                    <small>Аллергии: </small>
                                                 </div>
-                                                <div class="col-md-12 col-lg-3 text-muted d-flex flex-column justify-content-between">
-                                                    <div class="d-flex flex-row justify-content-between">
-                                                        <small>Персоны: </small><small>{{ subscription.dishes }}</small>
-                                                    </div>
-                                                    <div class="d-flex flex-row justify-content-between">
-                                                        <small>Аллергии: </small>
-                                                    </div>
-                                                    {% for allergen in subscription.allergens %}
-                                                    <div class="d-flex flex-row justify-content-between">
-                                                        <small>{{ allergen }}</small>
-                                                    </div>
-                                                    {% endfor %}
-                                                    <div class="d-flex flex-row justify-content-between">
-                                                        <small>Завтрак</small>
-                                                        {% if subscription.breakfast %}
-                                                        <small>Да</small>
-                                                        {% else %}
-                                                        <small>Нет</small>
-                                                        {% endif %}
-                                                    </div>
-                                                    <div class="d-flex flex-row justify-content-between">
-                                                        <small>Обед</small>
-                                                        {% if subscription.dinner %}
-                                                        <small>Да</small>
-                                                        {% else %}
-                                                        <small>Нет</small>
-                                                        {% endif %}
-                                                    </div>
-                                                    <div class="d-flex flex-row justify-content-between">
-                                                        <small>Ужин</small>
-                                                        {% if subscription.supper %}
-                                                        <small>Да</small>
-                                                        {% else %}
-                                                        <small>Нет</small>
-                                                        {% endif %}
-                                                    </div>
-                                                    <div class="d-flex flex-row justify-content-between">
-                                                        <small>Десерт</small>
-                                                        {% if subscription.desert %}
-                                                        <small>Да</small>
-                                                        {% else %}
-                                                        <small>Нет</small>
-                                                        {% endif %}
-                                                    </div>
+                                                {% for allergen in subscription.allergens %}
+                                                <div class="d-flex flex-row justify-content-between">
+                                                    <small>{{ allergen }}</small>
+                                                </div>
+                                                {% endfor %}
+                                                <div class="d-flex flex-row justify-content-between">
+                                                    <small>Завтрак</small>
+                                                    {% if subscription.breakfast %}
+                                                    <small>Да</small>
+                                                    {% else %}
+                                                    <small>Нет</small>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="d-flex flex-row justify-content-between">
+                                                    <small>Обед</small>
+                                                    {% if subscription.dinner %}
+                                                    <small>Да</small>
+                                                    {% else %}
+                                                    <small>Нет</small>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="d-flex flex-row justify-content-between">
+                                                    <small>Ужин</small>
+                                                    {% if subscription.supper %}
+                                                    <small>Да</small>
+                                                    {% else %}
+                                                    <small>Нет</small>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="d-flex flex-row justify-content-between">
+                                                    <small>Десерт</small>
+                                                    {% if subscription.desert %}
+                                                    <small>Да</small>
+                                                    {% else %}
+                                                    <small>Нет</small>
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                         </div>
-                                        {% else %}
-                                        <h2>Оформите подписку</h2>
-                                        <div class="col-md-12 col-lg-9">
-                                            <form action="{% url 'order' %}">
-                                                <button class="btn shadow-none btn-outline-success foodplan_green foodplan__border_green">Оформить подписку</button>
-                                            </form>
-                                        </div>
-                                        {% endif %}
                                     </div>
+                                    {% else %}
+                                    <div class="col-10 col-md-10">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h2>Оформите подписку</h2>
+                                                     <div class="col-md-12 col-lg-9">
+                                        <form action="{% url 'order' %}">
+                                            <button class="btn shadow-none btn-outline-success foodplan_green foodplan__border_green">Оформить подписку</button>
+                                        </form>
+                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endif %}
                                 </div>
                             </div>
+                        </div>
                     </div>
                     <div class="col-12 col-md-8 d-flex flex-column justify-content-between">
                         {% for selected_recipe in selected_recipes %}
@@ -133,7 +140,6 @@
                                 <img src="{{selected_recipe.image_url }}" alt="" class="w-100">
                             </div>
                             <h2>{{ selected_recipe.name }}</h2>
-
                             <div class="col-12 col-sm-8">
                                 <h6>{{ selected_recipe.description|linebreaksbr }}</h6>
                             </div>
