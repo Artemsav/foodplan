@@ -1,5 +1,5 @@
 import json
-from foodservice.models import Recipe, Ingredient, RecipeIngredient, RecipeCategory
+from foodservice.models import Recipe, Ingredient, RecipeIngredient, RecipeCategory, MenuType
 from django.core.management.base import BaseCommand
 import re
 
@@ -17,6 +17,7 @@ def load_to_db():
         recipies = json.loads(file.read())
         all_ingredients = Ingredient.objects.all()
         all_categories = RecipeCategory.objects.all()
+        mtype = MenuType.objects.all()
         all_categories_list = [cat.name for cat in all_categories]
         for recipe_title, recipe_description in recipies.items():
             recipy_cat = recipe_description.get('categorys')
@@ -27,7 +28,8 @@ def load_to_db():
                 name=recipe_title, calories=300,
                 image=recipe_description.get('image_url'),
                 description=description,
-                category=RecipeCategory.objects.filter(name__contains=recipe_description.get('categorys')[0])[0]
+                category=RecipeCategory.objects.filter(name__contains=recipe_description.get('categorys')[0])[0],
+                menu=mtype[0]
             )
             for ing in recipe_description.get('ingredients'):
                 all_ingredients = Ingredient.objects.all()
