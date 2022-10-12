@@ -14,6 +14,7 @@ urlpatterns = [
     path('accounts/profile/', fs_views.get_account, name='profile'),
     path('order/', subs_views.get_subscription, name='order'),
     path('register/', fs_views.register_user, name='register'),
+    path('recipes/', fs_views.get_recipes, name='resipes'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
