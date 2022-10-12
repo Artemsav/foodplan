@@ -2,6 +2,8 @@ from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
+
 
 from foodservice.models import (Allergen, Recipe, RecipeCategory,
                                 RecipeIngredient)
@@ -91,6 +93,7 @@ def get_account(request):
     return render(request, template_name="lk.html", context=context)
 
 
+
 def get_recipes(request):
     sub = Subscription.objects.get(client=request.user, status=True)
     context = {'selected_recipes': [
@@ -98,7 +101,7 @@ def get_recipes(request):
         serialize_recipe(recipe) for recipe in selected_recipes(sub)
     ]
     }
-    return render(request, template_name="recipes.html", context=context)
+    return render(request, template_name="menu.html", context=context)
 
 
 def register_user(request):
