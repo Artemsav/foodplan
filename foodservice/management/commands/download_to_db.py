@@ -16,20 +16,22 @@ def load_to_db():
     with open('result.json', 'r', encoding="utf-8") as file:
         recipies = json.loads(file.read())
         all_ingredients = Ingredient.objects.all()
-        all_categories = RecipeCategory.objects.all()
         mtype = MenuType.objects.all()
-        all_categories_list = [cat.name for cat in all_categories]
         for recipe_title, recipe_description in recipies.items():
+            all_categories = RecipeCategory.objects.all()
+            all_categories_list = [cat.name for cat in all_categories]
             recipy_cat = recipe_description.get('categorys')
             if recipy_cat not in all_categories_list:
-                RecipeCategory.objects.create(name=recipy_cat) 
+                recipy_category = RecipeCategory.objects.create(name=recipy_cat)
+            else:
+                recipy_category =RecipeCategory.objects.filter(name__contains=recipe_description.get('categorys')[0])[0]
             description = ' \n'.join(recipe_description.get('steps'))
             new_recipe = Recipe.objects.create(
                 name=recipe_title, calories=300,
                 image=recipe_description.get('image_url'),
                 description=description,
-                category=RecipeCategory.objects.filter(name__contains=recipe_description.get('categorys')[0])[0],
-                menu=mtype[0]
+                category=recipy_category,
+                menu=MenuType.objects.filter(name__contains='Стандартное')[0]
             )
             for ing in recipe_description.get('ingredients'):
                 all_ingredients = Ingredient.objects.all()
