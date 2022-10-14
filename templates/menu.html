@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+План питания на неделю, меню, рецепты, список покупок. Классическое меню, безуглеводное меню
+{% endblock title %}
+{% block menu %}
+{% if not subscription.status %}
+<form action="{% url 'profile' %}">
+    <button class="btn shadow-none btn-outline-success foodplan_green foodplan__border_green">Личный кабинет</button>
+</form>
+{% endif %}
+<form action="{% url 'logout' %}">
+    <button class="btn btn-outline-success shadow-none foodplan_green foodplan__border_green">Выйти</button>
+</form>
+{% endblock menu %}
+{% block content %}
+    <main style="margin-top: calc(2rem + 85px);">
+        <section>
+            <div class="container">
+                <div class="row">
+                    <div class="card col-12 p-3 mb-5 foodplan__shadow">
+                        <h4 class="foodplan__backButton">
+                            <strong><small><a href="#" class="link-secondary fw-light"></a></small></strong>
+                        </h4>
+                        <h2 class="text-center"><strong>Меню</strong></h2>
+                    </div>
+                    {% for selected_recipe in selected_recipes %}
+                    <div class="card col-12 col-md-12 p-3 mb-3 foodplan__shadow">
+                        <div class="tab-content mt-2">
+                            <div class="tab-pane fade show active" id="menu">
+                                <div class="row">
+                                    <div class="col-2">
+                                        <img src="{{selected_recipe.image_url }}" alt="" class="w-100">
+                                    </div>
+                                    <div class="col-10 col-md-10">
+                                        <div class="row">
+                                            <h4>{{ selected_recipe.category }}</h4>
+                                            <h2>{{ selected_recipe.name }}</h2>
+                                            <div class="col-12 col-sm-6">
+                                                <h6>{{ selected_recipe.description|linebreaksbr }}</h6>
+                                            </div>
+                                            <div class="col-12 col-sm-6">
+                                                <small class="link-secondary">Ингредиенты:</small>
+                                                <ul class="list-group list-group-flush">
+                                                    {% for ingridient in selected_recipe.ingridients %}
+                                                    <li class="list-group-item disabled"><small>- {{ ingridient }}</small></li>
+                                                    {% endfor%}
+                                                </ul>
+                                                <small class="link-secondary">Общая калорийность: {{ selected_recipe.calories }} ккал </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor%}
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock content %}
